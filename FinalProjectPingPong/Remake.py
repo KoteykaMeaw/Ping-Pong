@@ -106,6 +106,12 @@ class GameScreen(QWidget):
         self.score_sound.setAudioOutput(self.score_sound_ou)
         self.score_sound.setSource(QUrl.fromLocalFile("Sounds\\score.mp3"))
 
+        if Settings.SFXEnabled:
+            pass
+        else:
+            self.score_sound_ou.setVolume(0)
+            self.hit_sound_ou.setVolume(0)
+
         self.setupMainMenu()
         self.setupGameWidget()
         self.setupGameOverScreen()
@@ -117,11 +123,6 @@ class GameScreen(QWidget):
         self.game.player2_position = [round(ScreenSize[0] / 2), 0]
         self.game.ball_position = [round(ScreenSize[0] / 2), round(ScreenSize[1] / 2)]
         self.game.ball_velocity = Settings.DefaultBallSpeed
-
-    def on_media_state_changed(self, state):
-        if state == QMediaPlayer.PlaybackState.StoppedState:
-            self.background_music.play()
-
     def clear_event(self):
         if self.CurrentRandomEvent == "Faster Ball!":
             self.game.ball_velocity[0] /= 2
@@ -151,7 +152,6 @@ class GameScreen(QWidget):
             if self.CurrentRandomEvent == "Transparent Rackets!":
                 painter.setOpacity(1)
 
-
             painter.drawPixmap(self.game.ball_position[0], self.game.ball_position[1], self.ball_sprite)
 
             painter.setPen(QPen(QColor(0, 0, 0)))
@@ -171,22 +171,19 @@ class GameScreen(QWidget):
     def update_game(self):
         if self.currentWidget == self.gameWidget:
             self.ShouldDrawInterface = True
-        elif self.currentWidget == self.gameOverScreen:
+        if self.currentWidget == self.gameOverScreen:
             self.ShouldDrawInterface = False
-        elif self.currentWidget == self.mainMenu:
+        if self.currentWidget == self.mainMenu:
             self.ShouldDrawInterface = False
-        else:
-            print("what")
 
         if self.ShouldDrawInterface:
             if self.CurrentRandomEvent == "":
                 if random.randint(1, 150) == 10:
                     self.CurrentRandomEvent = random.choice(self.EventsList)
-                    self.event_timer.start(10000)
+                    self.event_timer.start(5000)
                     self.event_message_label.setText(self.CurrentRandomEvent)
                     self.event_message_timer.start(1000)
 
-                    print(self.CurrentRandomEvent)
                     if self.CurrentRandomEvent == "Faster Ball!":
                         self.game.ball_velocity[0] *= 2
                         self.game.ball_velocity[1] *= 2
