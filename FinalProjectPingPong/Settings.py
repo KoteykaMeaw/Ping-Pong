@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 ScreenSize = [400,600]
 HitboxesEnabled = False
 DefaultBallSpeed = [5,5]
+MusicEnabled = True
 
 #PLAYER SETTINGS
 PlayerSpeed = 10
