@@ -87,7 +87,12 @@ class GameScreen(QWidget):
         self.background_music.setAudioOutput(self.background_music_output)
 
         self.background_music.setSource(QUrl.fromLocalFile("Sounds\\mus_menu6.mp3"))
-        self.background_music_output.setVolume(0.5)
+
+        if Settings.MusicEnabled:
+            self.background_music_output.setVolume(0.5)
+        else:
+            self.background_music_output.setVolume(0)
+
         self.background_music.setLoops(2147483647)
         self.background_music.play()
 
